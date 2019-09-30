@@ -29,7 +29,7 @@ COMMON_DEPEND="
 	>=dev-libs/gobject-introspection-1.49.1:=
 	>=dev-libs/gjs-1.54.0
 	>=x11-libs/gtk+-3.15.0:3[introspection]
-	>=x11-wm/mutter-3.32.0[introspection]
+	>=x11-wm/mutter-3.34.0[introspection]
 	>=sys-auth/polkit-0.100[introspection]
 	>=gnome-base/gsettings-desktop-schemas-3.27.90
 	>=x11-libs/startup-notification-0.11
