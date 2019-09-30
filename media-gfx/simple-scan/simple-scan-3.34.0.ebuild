@@ -44,6 +44,10 @@ DEPEND="${COMMON_DEPEND}
 PATCHES=(
 	# Add control for optional dependencies
 	"${FILESDIR}"/${PN}-3.26-add-control-optional-deps.patch
+
+	# From GNOME:
+	# 	https://gitlab.gnome.org/GNOME/simple-scan/commit/47d3532459863e3b0bc1c7fd3a200f612863c814
+	"${FILESDIR}"/${PN}-3.34.1-libwepmix-fix-use-of-possibly-unassigned-local-variable-data.patch
 )
 
 src_prepare() {

@@ -9,7 +9,7 @@ HOMEPAGE="https://gitlab.gnome.org/GNOME/sushi"
 
 LICENSE="GPL-2+"
 SLOT="0"
-KEYWORDS="~*"
+KEYWORDS="*"
 
 IUSE="office wayland"
 
