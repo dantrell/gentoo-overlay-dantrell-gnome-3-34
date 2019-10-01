@@ -232,6 +232,113 @@ diff '--exclude=.git' -urN a/meson_options.txt b/meson_options.txt
 \ No newline at end of file
 +option('wacom', type: 'boolean', value: true, description: 'build with Wacom support')
 +option('wayland', type: 'boolean', value: true, description: 'build with Wayland support')
+diff '--exclude=.git' -urN a/panels/background/bg-pictures-source.c b/panels/background/bg-pictures-source.c
+--- a/panels/background/bg-pictures-source.c	2019-09-09 10:38:05.000000000 -0500
++++ b/panels/background/bg-pictures-source.c	2019-09-30 20:36:29.517085036 -0500
+@@ -23,13 +23,17 @@
+ 
+ #include "bg-pictures-source.h"
+ 
++#ifdef BUILD_ONLINE_ACCOUNTS
+ #include "cc-background-grilo-miner.h"
++#endif /* BUILD_ONLINE_ACCOUNTS */
+ #include "cc-background-item.h"
+ 
+ #include <string.h>
+ #include <cairo-gobject.h>
+ #include <gio/gio.h>
++#ifdef BUILD_ONLINE_ACCOUNTS
+ #include <grilo.h>
++#endif /* BUILD_ONLINE_ACCOUNTS */
+ #include <libgnome-desktop/gnome-desktop-thumbnail.h>
+ #include <gdesktop-enums.h>
+ 
+@@ -43,7 +47,9 @@
+ 
+   GCancellable *cancellable;
+ 
++#ifdef BUILD_ONLINE_ACCOUNTS
+   CcBackgroundGriloMiner *grl_miner;
++#endif /* BUILD_ONLINE_ACCOUNTS */
+ 
+   GFileMonitor *picture_dir_monitor;
+   GFileMonitor *cache_dir_monitor;
+@@ -83,7 +89,9 @@
+       g_clear_object (&source->cancellable);
+     }
+ 
++#ifdef BUILD_ONLINE_ACCOUNTS
+   g_clear_object (&source->grl_miner);
++#endif /* BUILD_ONLINE_ACCOUNTS */
+ 
+   G_OBJECT_CLASS (bg_pictures_source_parent_class)->dispose (object);
+ }
+@@ -392,7 +400,11 @@
+   const gchar *pictures_path;
+   g_autoptr(GFile) pictures_dir = NULL;
+   g_autoptr(GFile) cache_dir = NULL;
++#ifdef BUILD_ONLINE_ACCOUNTS
+   GrlMedia *media;
++#else /* BUILD_ONLINE_ACCOUNTS */
++  gpointer media = NULL;
++#endif
+ 
+   /* find png and jpeg files */
+   if (!content_type)
+@@ -432,7 +444,9 @@
+                 "source-url", source_uri,
+ 		NULL);
+ 
++#ifdef BUILD_ONLINE_ACCOUNTS
+   media = g_object_get_data (G_OBJECT (file), "grl-media");
++#endif /* BUILD_ONLINE_ACCOUNTS */
+   if (media == NULL)
+     {
+       g_object_set_data_full (G_OBJECT (file), "item", g_object_ref (item), g_object_unref);
+@@ -496,6 +510,7 @@
+   return add_single_file (bg_source, file, content_type, mtime);
+ }
+ 
++#ifdef BUILD_ONLINE_ACCOUNTS
+ static gboolean
+ add_single_file_from_media (BgPicturesSource *bg_source,
+                             GFile            *file,
+@@ -520,6 +535,7 @@
+ 
+   return add_single_file (bg_source, file, content_type, (guint64) mtime_unix);
+ }
++#endif /* BUILD_ONLINE_ACCOUNTS */
+ 
+ gboolean
+ bg_pictures_source_add (BgPicturesSource     *bg_source,
+@@ -806,6 +822,7 @@
+   return monitor;
+ }
+ 
++#ifdef BUILD_ONLINE_ACCOUNTS
+ static void
+ media_found_cb (BgPicturesSource *self, GrlMedia *media)
+ {
+@@ -817,6 +834,7 @@
+   g_object_set_data_full (G_OBJECT (file), "grl-media", g_object_ref (media), g_object_unref);
+   add_single_file_from_media (self, file, media);
+ }
++#endif /* BUILD_ONLINE_ACCOUNTS */
+ 
+ static void
+ bg_pictures_source_init (BgPicturesSource *self)
+@@ -839,9 +857,11 @@
+   cache_path = bg_pictures_source_get_cache_path ();
+   self->cache_dir_monitor = monitor_path (self, cache_path);
+ 
++#ifdef BUILD_ONLINE_ACCOUNTS
+   self->grl_miner = cc_background_grilo_miner_new ();
+   g_signal_connect_swapped (self->grl_miner, "media-found", G_CALLBACK (media_found_cb), self);
+   cc_background_grilo_miner_start (self->grl_miner);
++#endif /* BUILD_ONLINE_ACCOUNTS */
+ }
+ 
+ BgPicturesSource *
 diff '--exclude=.git' -urN a/panels/background/meson.build b/panels/background/meson.build
 --- a/panels/background/meson.build	2019-09-09 10:38:05.000000000 -0500
 +++ b/panels/background/meson.build	2019-09-29 07:33:33.772646918 -0500
@@ -310,6 +417,95 @@ diff '--exclude=.git' -urN a/panels/color/meson.build b/panels/color/meson.build
  cflags += [
    '-DGNOMELOCALEDIR="@0@"'.format(control_center_localedir),
    '-DBINDIR="@0@"'.format(control_center_bindir)
+diff '--exclude=.git' -urN a/panels/display/cc-display-panel.c b/panels/display/cc-display-panel.c
+--- a/panels/display/cc-display-panel.c	2019-09-09 10:38:05.000000000 -0500
++++ b/panels/display/cc-display-panel.c	2019-09-30 22:34:21.505882148 -0500
+@@ -18,6 +18,8 @@
+  *
+  */
+ 
++#include <config.h>
++
+ #include "cc-display-panel.h"
+ 
+ #include <gtk/gtk.h>
+@@ -36,7 +38,9 @@
+ #include "cc-display-config-manager-dbus.h"
+ #include "cc-display-config.h"
+ #include "cc-display-arrangement.h"
++#ifdef BUILD_COLOR
+ #include "cc-night-light-page.h"
++#endif /* BUILD_COLOR */
+ #include "cc-display-resources.h"
+ #include "cc-display-settings.h"
+ 
+@@ -76,8 +80,10 @@
+ 
+   guint           focus_id;
+ 
++#ifdef BUILD_COLOR
+   CcNightLightPage *night_light_page;
+   GtkDialog *night_light_dialog;
++#endif /* BUILD_COLOR */
+ 
+   UpClient *up_client;
+   gboolean lid_is_closed;
+@@ -435,7 +441,9 @@
+   g_clear_object (&self->shell_cancellable);
+   g_clear_object (&self->shell_proxy);
+ 
++#ifdef BUILD_COLOR
+   g_clear_pointer ((GtkWidget **) &self->night_light_dialog, gtk_widget_destroy);
++#endif /* BUILD_COLOR */
+ 
+   G_OBJECT_CLASS (cc_display_panel_parent_class)->dispose (object);
+ }
+@@ -475,6 +483,7 @@
+   config_ensure_of_type (panel, type);
+ }
+ 
++#ifdef BUILD_COLOR
+ static void
+ on_night_light_list_box_row_activated_cb (CcDisplayPanel *panel)
+ {
+@@ -496,6 +505,7 @@
+   gtk_window_set_transient_for (GTK_WINDOW (panel->night_light_dialog), toplevel);
+   gtk_window_present (GTK_WINDOW (panel->night_light_dialog));
+ }
++#endif /* BUILD_COLOR */
+ 
+ static void
+ on_output_enabled_active_changed_cb (CcDisplayPanel *panel)
+@@ -638,7 +648,9 @@
+   CcPanelClass *panel_class = CC_PANEL_CLASS (klass);
+   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+ 
++#ifdef BUILD_COLOR
+   g_type_ensure (CC_TYPE_NIGHT_LIGHT_PAGE);
++#endif /* BUILD_COLOR */
+ 
+   panel_class->get_help_uri = cc_display_panel_get_help_uri;
+   panel_class->get_title_widget = cc_display_panel_get_title_widget;
+@@ -656,7 +668,9 @@
+   gtk_widget_class_bind_template_child (widget_class, CcDisplayPanel, config_type_single);
+   gtk_widget_class_bind_template_child (widget_class, CcDisplayPanel, current_output_label);
+   gtk_widget_class_bind_template_child (widget_class, CcDisplayPanel, display_settings_frame);
++#ifdef BUILD_COLOR
+   gtk_widget_class_bind_template_child (widget_class, CcDisplayPanel, night_light_page);
++#endif /* BUILD_COLOR */
+   gtk_widget_class_bind_template_child (widget_class, CcDisplayPanel, output_enabled_switch);
+   gtk_widget_class_bind_template_child (widget_class, CcDisplayPanel, output_selection_combo);
+   gtk_widget_class_bind_template_child (widget_class, CcDisplayPanel, output_selection_stack);
+@@ -666,7 +680,9 @@
+   gtk_widget_class_bind_template_child (widget_class, CcDisplayPanel, stack_switcher);
+ 
+   gtk_widget_class_bind_template_callback (widget_class, on_config_type_toggled_cb);
++#ifdef BUILD_COLOR
+   gtk_widget_class_bind_template_callback (widget_class, on_night_light_list_box_row_activated_cb);
++#endif /* BUILD_COLOR */
+   gtk_widget_class_bind_template_callback (widget_class, on_output_enabled_active_changed_cb);
+   gtk_widget_class_bind_template_callback (widget_class, on_output_selection_combo_changed_cb);
+   gtk_widget_class_bind_template_callback (widget_class, on_output_selection_two_toggled_cb);
 diff '--exclude=.git' -urN a/panels/display/meson.build b/panels/display/meson.build
 --- a/panels/display/meson.build	2019-09-09 10:38:05.000000000 -0500
 +++ b/panels/display/meson.build	2019-09-25 00:29:03.031689930 -0500
@@ -493,7 +689,7 @@ diff '--exclude=.git' -urN a/panels/online-accounts/meson.build b/panels/online-
  
 diff '--exclude=.git' -urN a/panels/power/cc-power-panel.c b/panels/power/cc-power-panel.c
 --- a/panels/power/cc-power-panel.c	2019-09-09 10:38:05.000000000 -0500
-+++ b/panels/power/cc-power-panel.c	2019-09-25 00:18:03.308707132 -0500
++++ b/panels/power/cc-power-panel.c	2019-09-30 20:36:09.652176601 -0500
 @@ -1995,7 +1995,7 @@
                      G_CALLBACK (wifi_switch_changed), self);
  #endif
@@ -503,6 +699,15 @@ diff '--exclude=.git' -urN a/panels/power/cc-power-panel.c b/panels/power/cc-pow
  
    self->bt_rfkill = cc_object_storage_create_dbus_proxy_sync (G_BUS_TYPE_SESSION,
                                                                G_DBUS_PROXY_FLAGS_NONE,
+@@ -2039,7 +2039,7 @@
+ 		G_CALLBACK (bt_switch_changed), self);
+ 
+   bt_powered_state_changed (self);
+-#endif
++#endif /* BUILD_BLUETOOTH */
+ }
+ 
+ #define NEVER 0
 diff '--exclude=.git' -urN a/panels/power/meson.build b/panels/power/meson.build
 --- a/panels/power/meson.build	2019-09-09 10:38:05.000000000 -0500
 +++ b/panels/power/meson.build	2019-09-25 00:18:03.308707132 -0500
@@ -522,14 +727,14 @@ diff '--exclude=.git' -urN a/panels/power/meson.build b/panels/power/meson.build
  
 diff '--exclude=.git' -urN a/panels/user-accounts/cc-realm-manager.c b/panels/user-accounts/cc-realm-manager.c
 --- a/panels/user-accounts/cc-realm-manager.c	2019-09-09 10:38:05.000000000 -0500
-+++ b/panels/user-accounts/cc-realm-manager.c	2019-09-25 00:18:03.308707132 -0500
++++ b/panels/user-accounts/cc-realm-manager.c	2019-09-30 20:35:19.771405763 -0500
 @@ -22,7 +22,9 @@
  
  #include "cc-realm-manager.h"
  
 +#ifdef HAVE_KERBEROS
  #include <krb5/krb5.h>
-+#endif
++#endif /* HAVE_KERBEROS */
  
  #include <glib.h>
  #include <glib/gi18n.h>
@@ -630,7 +835,7 @@ diff '--exclude=.git' -urN a/panels/wacom/meson.build b/panels/wacom/meson.build
  test_cflags = cflags + ['-DFAKE_AREA']
 diff '--exclude=.git' -urN a/shell/cc-panel-loader.c b/shell/cc-panel-loader.c
 --- a/shell/cc-panel-loader.c	2019-09-09 10:38:05.000000000 -0500
-+++ b/shell/cc-panel-loader.c	2019-09-25 00:18:03.309707128 -0500
++++ b/shell/cc-panel-loader.c	2019-09-30 20:34:36.436603950 -0500
 @@ -36,7 +36,9 @@
  #ifdef BUILD_BLUETOOTH
  extern GType cc_bluetooth_panel_get_type (void);
@@ -667,7 +872,7 @@ diff '--exclude=.git' -urN a/shell/cc-panel-loader.c b/shell/cc-panel-loader.c
  #endif
 +#ifdef BUILD_COLOR
    PANEL_TYPE("color",            cc_color_panel_get_type,                NULL),
-+#endif
++#endif /* BUILD_COLOR */
    PANEL_TYPE("datetime",         cc_date_time_panel_get_type,            NULL),
    PANEL_TYPE("display",          cc_display_panel_get_type,              NULL),
    PANEL_TYPE("info-overview",    cc_info_overview_panel_get_type,        NULL),
@@ -677,11 +882,11 @@ diff '--exclude=.git' -urN a/shell/cc-panel-loader.c b/shell/cc-panel-loader.c
    PANEL_TYPE("notifications",    cc_notifications_panel_get_type,        NULL),
 +#ifdef BUILD_ONLINE_ACCOUNTS
    PANEL_TYPE("online-accounts",  cc_goa_panel_get_type,                  NULL),
-+#endif
++#endif /* BUILD_ONLINE_ACCOUNTS */
    PANEL_TYPE("power",            cc_power_panel_get_type,                NULL),
 +#ifdef BUILD_PRINTERS
    PANEL_TYPE("printers",         cc_printers_panel_get_type,             NULL),
-+#endif
++#endif /* BUILD_PRINTERS */
    PANEL_TYPE("privacy",          cc_privacy_panel_get_type,              NULL),
    PANEL_TYPE("region",           cc_region_panel_get_type,               NULL),
    PANEL_TYPE("search",           cc_search_panel_get_type,               NULL),
