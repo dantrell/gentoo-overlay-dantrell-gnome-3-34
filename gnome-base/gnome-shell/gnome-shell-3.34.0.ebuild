@@ -12,7 +12,7 @@ LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
 KEYWORDS="*"
 
-IUSE="+bluetooth deprecated-background elogind gtk-doc +ibus +networkmanager systemd telepathy vanilla-async vanilla-gc vanilla-motd vanilla-screen wayland"
+IUSE="+bluetooth deprecated-background elogind gtk-doc +ibus +networkmanager systemd telepathy tools vanilla-async vanilla-gc vanilla-motd vanilla-screen wayland"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	?? ( elogind systemd )
 "
@@ -109,6 +109,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-libs/libxslt
 	>=dev-util/gdbus-codegen-2.45.3
 	gtk-doc? ( >=dev-util/gtk-doc-1.17 )
+	tools? ( app-text/asciidoc )
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
 "
@@ -153,6 +154,7 @@ src_prepare() {
 src_configure() {
 	local emesonargs=(
 		$(meson_use bluetooth)
+		$(meson_use tools extensions_tool)
 		$(meson_use gtk-doc gtk_doc)
 		-Dman=true
 		$(meson_use networkmanager)

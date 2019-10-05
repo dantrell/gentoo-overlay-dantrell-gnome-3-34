@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 PYTHON_COMPAT=( python{3_5,3_6,3_7} )
 
 inherit gnome.org meson python-single-r1 xdg
@@ -34,9 +34,8 @@ RDEPEND="${COMMON_DEPEND}
 	>=gnome-base/gnome-shell-3.32
 	x11-wm/mutter
 "
-DEPEND="${COMMON_DEPEND}
-	>=sys-devel/gettext-0.19.8
-"
+DEPEND="${COMMON_DEPEND}"
+BDEPEND=">=sys-devel/gettext-0.19.8"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-3.28.1-gentoo-cursor-themes.patch # Add contents of Gentoo's cursor theme directory to cursor theme list
