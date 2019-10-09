@@ -95,15 +95,12 @@ src_prepare() {
 		eapply "${FILESDIR}"/${PN}-3.32.0-metashapedtexture-disable-mipmapping-emulation.patch
 	fi
 
-	# From GNOME:
-	# 	https://gitlab.gnome.org/GNOME/mutter/commit/850ef518795dcc20d3b9a4f661f70ff8d0ddacb2
-	eapply "${FILESDIR}"/${PN}-3.34.1-core-split-x11-display-initialization-in-2-signals.patch
-
 	if ! use wayland; then
 		# From Gentoo:
 		# 	https://forums.gentoo.org/viewtopic-p-8106588.html#8106588
 		# 	https://gitlab.gnome.org/GNOME/mutter/issues/797
-		eapply "${FILESDIR}"/${PN}-3.34.0-fix-without-gdkwayland.patch
+		# 	https://gitlab.gnome.org/GNOME/mutter/merge_requests/817
+		eapply "${FILESDIR}"/${PN}-3.34.1-fix-without-gdkwayland.patch
 	fi
 
 	gnome2_src_prepare
