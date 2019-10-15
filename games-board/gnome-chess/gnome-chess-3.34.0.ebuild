@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 VALA_MIN_API_VERSION="0.40"
 
 inherit gnome.org gnome2-utils meson vala xdg
@@ -17,7 +17,7 @@ IUSE="+engines"
 RDEPEND="
 	>=dev-libs/glib-2.44:2
 	>=x11-libs/gtk+-3.20.0:3
-	>=gnome-base/librsvg-2.32.0:2[vala]
+	>=gnome-base/librsvg-2.32.0:2
 	engines? (
 		games-board/crafty
 		games-board/gnuchess
@@ -26,6 +26,9 @@ RDEPEND="
 	)
 "
 DEPEND="${RDEPEND}
+	gnome-base/librsvg:2[vala]
+"
+BDEPEND="
 	$(vala_depend)
 	dev-util/itstool
 	dev-libs/appstream-glib

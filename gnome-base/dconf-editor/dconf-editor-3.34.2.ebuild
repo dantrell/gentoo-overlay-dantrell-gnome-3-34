@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 VALA_MIN_API_VERSION="0.40"
 
 inherit gnome.org gnome2-utils meson vala xdg
@@ -17,7 +17,8 @@ RDEPEND="
 	>=dev-libs/glib-2.55.1:2
 	>=x11-libs/gtk+-3.22.27:3
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
 	$(vala_depend)
 	dev-libs/libxml2:2
 	>=sys-devel/gettext-0.19.8
@@ -31,12 +32,10 @@ src_prepare() {
 
 pkg_postinst() {
 	xdg_pkg_postinst
-	gnome2_icon_cache_update
 	gnome2_schemas_update
 }
 
 pkg_postrm() {
 	xdg_pkg_postrm
-	gnome2_icon_cache_update
 	gnome2_schemas_update
 }
