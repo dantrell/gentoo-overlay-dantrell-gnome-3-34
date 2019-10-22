@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 
 inherit gnome.org gnome2-utils meson vala xdg
 
@@ -20,7 +20,8 @@ RDEPEND="
 	dev-libs/libgnome-games-support:1=
 	>=gnome-base/librsvg-2.32.0:2
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
 	$(vala_depend)
 	dev-libs/appstream-glib
 	dev-libs/libxml2:2

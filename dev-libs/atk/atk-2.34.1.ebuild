@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 
 inherit gnome.org meson multilib-minimal xdg
 
@@ -14,10 +14,11 @@ KEYWORDS="*"
 IUSE="gtk-doc +introspection"
 
 RDEPEND="
-	>=dev-libs/glib-2.34.3:2[${MULTILIB_USEDEP}]
+	>=dev-libs/glib-2.38.0:2[${MULTILIB_USEDEP}]
 	introspection? ( >=dev-libs/gobject-introspection-1.54.0:= )
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
 	gtk-doc? (
 		>=dev-util/gtk-doc-1.25
 		app-text/docbook-xml-dtd:4.3 )

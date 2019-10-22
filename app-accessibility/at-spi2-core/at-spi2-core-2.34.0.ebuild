@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 
 inherit gnome.org meson multilib-minimal systemd virtualx xdg
 
@@ -23,7 +23,8 @@ RDEPEND="
 		x11-libs/libXi[${MULTILIB_USEDEP}]
 	)
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
 	gtk-doc? (
 		>=dev-util/gtk-doc-1.25
 		app-text/docbook-xml-dtd:4.3 )
@@ -38,10 +39,10 @@ PATCHES=(
 
 multilib_src_configure() {
 	local emesonargs=(
-		-Denable_docs=$(multilib_native_usex gtk-doc true false)
-		-Denable-introspection=$(multilib_native_usex introspection)
-		-Denable-x11=$(usex X)
 		-Dsystemd_user_dir="$(systemd_get_userunitdir)"
+		-Ddocs=$(multilib_native_usex gtk-doc true false)
+		-Dintrospection=$(multilib_native_usex introspection)
+		-Dx11=$(usex X)
 	)
 	meson_src_configure
 }

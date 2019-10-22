@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 
 inherit gnome.org meson multilib-minimal virtualx xdg
 
@@ -16,10 +16,11 @@ IUSE="test"
 RDEPEND="
 	>=sys-apps/dbus-1.5[${MULTILIB_USEDEP}]
 	>=dev-libs/glib-2.32:2[${MULTILIB_USEDEP}]
-	>=dev-libs/atk-2.30.0[${MULTILIB_USEDEP}]
-	>=app-accessibility/at-spi2-core-2.30.0[${MULTILIB_USEDEP}]
+	>=dev-libs/atk-2.33.3[${MULTILIB_USEDEP}]
+	>=app-accessibility/at-spi2-core-2.33.2[${MULTILIB_USEDEP}]
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
 	virtual/pkgconfig[${MULTILIB_USEDEP}]
 	test? ( >=dev-libs/libxml2-2.9.1 )
 "

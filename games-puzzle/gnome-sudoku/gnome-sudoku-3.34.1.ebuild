@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 VALA_MIN_API_VERSION="0.36"
 
 inherit gnome.org gnome2-utils meson vala xdg
@@ -17,13 +17,14 @@ IUSE=""
 RDEPEND="
 	>=dev-libs/glib-2.40:2
 	dev-libs/libgee:0.8=[introspection]
+	>=x11-libs/gtk+-3.19.0:3[introspection]
 	dev-libs/json-glib
 	>=dev-libs/qqwing-1.3.4
 	x11-libs/gdk-pixbuf:2[introspection]
-	>=x11-libs/gtk+-3.19.0:3[introspection]
 	x11-libs/pango[introspection]
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
 	$(vala_depend)
 	dev-libs/appstream-glib
 	dev-util/itstool
@@ -41,12 +42,10 @@ src_prepare() {
 
 pkg_postinst() {
 	xdg_pkg_postinst
-	gnome2_icon_cache_update
 	gnome2_schemas_update
 }
 
 pkg_postrm() {
 	xdg_pkg_postrm
-	gnome2_icon_cache_update
 	gnome2_schemas_update
 }

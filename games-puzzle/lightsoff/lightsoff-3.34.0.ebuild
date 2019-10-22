@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 VALA_MIN_API_VERSION="0.40"
 
 inherit gnome.org gnome2-utils meson xdg vala
@@ -21,8 +21,9 @@ RDEPEND="
 	>=media-libs/clutter-gtk-1.5.5:1.0
 	>=gnome-base/librsvg-2.32.0:2
 "
+DEPEND="${RDEPEND}"
 # libxml2:2 needed for glib-compile-resources xml-stripblanks attributes
-DEPEND="${RDEPEND}
+BDEPEND="
 	dev-libs/appstream-glib
 	dev-libs/libxml2:2
 	dev-util/itstool
