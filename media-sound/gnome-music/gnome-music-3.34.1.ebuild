@@ -51,12 +51,6 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
-PATCHES=(
-	# From Arch:
-	# 	https://git.archlinux.org/svntogit/packages.git/commit/?id=080e2e103de9b9bae9f8ef3c2e5ee97f06c5a3dd
-	"${FILESDIR}"/${PN}-3.34.0-loadfix.patch
-)
-
 pkg_setup() {
 	python_setup
 }
