@@ -21,6 +21,7 @@ RDEPEND="
 	>=x11-libs/gtk+-3.19.3:3
 	>=x11-libs/gtksourceview-4.0.2:4
 	>=net-libs/libsoup-2.42:2.4
+	>=dev-libs/libgee-0.20.0:0.8
 	dev-libs/libxml2:2
 	dev-libs/mpc:=
 	dev-libs/mpfr:0=
