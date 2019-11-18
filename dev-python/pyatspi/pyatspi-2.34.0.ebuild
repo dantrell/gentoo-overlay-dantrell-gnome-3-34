@@ -5,7 +5,7 @@ PYTHON_COMPAT=( python{2_7,3_5,3_6,3_7,3_8} )
 
 inherit gnome2 python-r1
 
-DESCRIPTION="Python binding to at-spi library"
+DESCRIPTION="Python client bindings for D-Bus AT-SPI"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
 
 # Note: only some of the tests are GPL-licensed, everything else is LGPL
@@ -23,7 +23,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 "
 RDEPEND="${COMMON_DEPEND}
 	>=sys-apps/dbus-1
-	>=app-accessibility/at-spi2-core-2.32[introspection]
+	>=app-accessibility/at-spi2-core-2.34[introspection]
 	!<gnome-extra/at-spi-1.32.0-r1
 "
 DEPEND="${COMMON_DEPEND}
@@ -44,7 +44,11 @@ src_compile() {
 }
 
 src_install() {
-	python_foreach_impl run_in_build_dir gnome2_src_install
+	installing() {
+		gnome2_src_install
+		python_optimize
+	}
+	python_foreach_impl run_in_build_dir installing
 
 	docinto examples
 	dodoc examples/*.py

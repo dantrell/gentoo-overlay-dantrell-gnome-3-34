@@ -7,7 +7,7 @@ inherit gnome.org meson multilib-minimal systemd virtualx xdg
 DESCRIPTION="D-Bus accessibility specifications and registration daemon"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
 
-LICENSE="LGPL-2+"
+LICENSE="LGPL-2.1+"
 SLOT="2"
 KEYWORDS="*"
 
@@ -25,6 +25,7 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
+	>=dev-util/meson-0.50.0
 	gtk-doc? (
 		>=dev-util/gtk-doc-1.25
 		app-text/docbook-xml-dtd:4.3 )

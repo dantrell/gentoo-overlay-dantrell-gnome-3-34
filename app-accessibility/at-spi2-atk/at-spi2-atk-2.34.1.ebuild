@@ -7,7 +7,7 @@ inherit gnome.org meson multilib-minimal virtualx xdg
 DESCRIPTION="Gtk module for bridging AT-SPI to Atk"
 HOMEPAGE="https://wiki.gnome.org/Accessibility"
 
-LICENSE="LGPL-2+"
+LICENSE="LGPL-2.1+"
 SLOT="2"
 KEYWORDS="*"
 
