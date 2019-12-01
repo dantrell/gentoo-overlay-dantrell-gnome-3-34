@@ -1,0 +1,79 @@
+diff -Nuar a/src/nautilus-canvas-item.c b/src/nautilus-canvas-item.c
+--- a/src/nautilus-canvas-item.c	2019-11-22 13:57:04.000000000 +0100
++++ b/src/nautilus-canvas-item.c	2019-11-29 15:48:59.339842908 +0100
+@@ -1381,14 +1381,18 @@
+     GString *str;
+     char *zeroified_text;
+     const char *p;
++#if PANGO_VERSION >= PANGO_VERSION_ENCODE(1, 44, 0)
+     PangoAttrList *attr_list;
++#endif
+ 
+     canvas_item = EEL_CANVAS_ITEM (item);
+ 
+     container = NAUTILUS_CANVAS_CONTAINER (canvas_item->canvas);
+     context = gtk_widget_get_pango_context (GTK_WIDGET (canvas_item->canvas));
+     layout = pango_layout_new (context);
++#if PANGO_VERSION >= PANGO_VERSION_ENCODE(1, 44, 0)
+     attr_list = pango_attr_list_new ();
++#endif
+ 
+     zeroified_text = NULL;
+ 
+@@ -1417,8 +1421,10 @@
+     pango_layout_set_spacing (layout, LABEL_LINE_SPACING);
+     pango_layout_set_wrap (layout, PANGO_WRAP_WORD_CHAR);
+ 
++#if PANGO_VERSION >= PANGO_VERSION_ENCODE(1, 44, 0)
+     pango_attr_list_insert (attr_list, pango_attr_insert_hyphens_new (FALSE));
+     pango_layout_set_attributes (layout, attr_list);
++#endif
+ 
+     /* Create a font description */
+     if (container->details->font)
+@@ -1432,7 +1438,9 @@
+     pango_layout_set_font_description (layout, desc);
+     pango_font_description_free (desc);
+     g_free (zeroified_text);
++#if PANGO_VERSION >= PANGO_VERSION_ENCODE(1, 44, 0)
+     pango_attr_list_unref (attr_list);
++#endif
+ 
+     return layout;
+ }
+diff -Nuar a/src/nautilus-view-icon-item-ui.c b/src/nautilus-view-icon-item-ui.c
+--- a/src/nautilus-view-icon-item-ui.c	2019-11-22 13:57:04.000000000 +0100
++++ b/src/nautilus-view-icon-item-ui.c	2019-11-29 15:48:10.213016871 +0100
+@@ -128,7 +128,10 @@
+     GtkBox *container;
+     GtkBox *item_selection_background;
+     GtkLabel *label;
++#if PANGO_VERSION >= PANGO_VERSION_ENCODE(1, 44, 0)
+     PangoAttrList *attr_list;
++#endif
++
+     GtkStyleContext *style_context;
+     NautilusFile *file;
+     guint icon_size;
+@@ -150,9 +153,11 @@
+ 
+     label = GTK_LABEL (gtk_label_new (nautilus_file_get_display_name (file)));
+     gtk_widget_show (GTK_WIDGET (label));
++#if PANGO_VERSION >= PANGO_VERSION_ENCODE(1, 44, 0)
+     attr_list = pango_attr_list_new ();
+     pango_attr_list_insert (attr_list, pango_attr_insert_hyphens_new (FALSE));
+     gtk_label_set_attributes (label, attr_list);
++#endif
+     gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_MIDDLE);
+     gtk_label_set_line_wrap (label, TRUE);
+     gtk_label_set_line_wrap_mode (label, PANGO_WRAP_WORD_CHAR);
+@@ -183,7 +188,9 @@
+     g_signal_connect (self->model, "notify::file",
+                       (GCallback) on_view_item_file_changed, self);
+ 
++#if PANGO_VERSION >= PANGO_VERSION_ENCODE(1, 44, 0)
+     pango_attr_list_unref (attr_list);
++#endif
+ }
+ 
+ static void
