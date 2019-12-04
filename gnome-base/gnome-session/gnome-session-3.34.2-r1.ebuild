@@ -82,6 +82,11 @@ src_prepare() {
 
 	eapply "${FILESDIR}"/${PN}-3.34.0-support-elogind.patch
 
+	# From GNOME:
+	# 	https://gitlab.gnome.org/GNOME/gnome-session/commit/646b9bc0584d02033ab9600c39b77d6f99bfc4a6
+	# 	https://gitlab.gnome.org/GNOME/gnome-session/commit/60e619b8a2cacc7b844fe6f0e206c895de68f890
+	eapply "${FILESDIR}"/${PN}-3.34.2-whitelist-xdg-session-id.patch
+
 	xdg_src_prepare
 }
 
