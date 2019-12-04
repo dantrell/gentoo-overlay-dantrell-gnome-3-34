@@ -103,6 +103,8 @@ src_prepare() {
 		eapply "${FILESDIR}"/${PN}-3.34.1-fix-without-gdkwayland.patch
 	fi
 
+	eapply "${FILESDIR}"/${PN}-3.32.2-eglmesaext-include.patch
+
 	gnome2_src_prepare
 }
 
