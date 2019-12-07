@@ -1,6 +1,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 
 inherit gnome.org gnome2-utils meson xdg
 
@@ -36,7 +36,8 @@ RDEPEND="
 	net-libs/libsoup:2.4[introspection]
 	net-libs/webkit-gtk:4[introspection]
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
 "
