@@ -105,6 +105,10 @@ src_prepare() {
 	# 	https://bugzilla.gnome.org/show_bug.cgi?id=734964
 	eapply "${FILESDIR}"/${PN}-3.34.0-optionally-allow-suspending-with-multiple-monitors-on-lid-close.patch
 
+	# From Vlad Banea:
+	# 	https://github.com/GNOME/gnome-settings-daemon/pull/8
+	eapply "${FILESDIR}"/${PN}-3.34.2-plugins-wacom-fix-build-without-wayland.patch
+
 	xdg_src_prepare
 }
 
