@@ -99,7 +99,6 @@ that are currently available with packages include:
   autocompletion support.
 * dev-util/valgrind for integration with valgrind.
 * dev-util/meson for integration with the Meson build system.
-* virtual/cargo for integration with the Rust Cargo build system.
 * dev-util/cmake for integration with the CMake build system.
 * net-libs/nodejs[npm] for integration with the NPM package system.
 '
