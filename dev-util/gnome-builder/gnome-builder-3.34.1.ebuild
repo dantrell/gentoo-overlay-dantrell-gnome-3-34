@@ -46,7 +46,7 @@ RDEPEND="
 	>=dev-libs/json-glib-1.2.0
 	>=dev-libs/jsonrpc-glib-3.30.1[vala?]
 	>=x11-libs/pango-1.38.0
-	>=dev-libs/libpeas-1.22.0[python,${PYTHON_USEDEP}]
+	>=dev-libs/libpeas-1.22.0[python,${PYTHON_SINGLE_USEDEP}]
 	>=dev-libs/template-glib-3.31.90[introspection,vala?]
 	>=x11-libs/vte-0.40.2:2.91[vala?]
 	>=dev-libs/libxml2-2.9.0
@@ -55,7 +55,9 @@ RDEPEND="
 	webkit? ( >=net-libs/webkit-gtk-2.12.0:4=[introspection] )
 
 	>=dev-libs/gobject-introspection-1.48.0:=
-	>=dev-python/pygobject-3.22.0:3[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		>=dev-python/pygobject-3.22.0:3[${PYTHON_MULTI_USEDEP}]
+	')
 	${PYTHON_DEPS}
 	clang? ( sys-devel/clang:= )
 	devhelp? ( >=dev-util/devhelp-3.25.1:= )

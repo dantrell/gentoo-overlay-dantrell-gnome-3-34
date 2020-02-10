@@ -9,7 +9,7 @@ DESCRIPTION="Location and timezone database and weather-lookup library"
 HOMEPAGE="https://wiki.gnome.org/Projects/LibGWeather"
 
 LICENSE="GPL-2+"
-SLOT="2/3-15" # subslot = 3-(libgweather-3 soname suffix)
+SLOT="2/3-16-2" # subslot = 3-(libgweather-3 soname suffix) w/ temporary -2 suffix for silent ABI break after 3.28 without soname bump as per distro-list
 KEYWORDS="~*"
 
 IUSE="glade gtk-doc +introspection +vala"
@@ -37,6 +37,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-3.32.1-meson-tweaks.patch # Provide introspection optionality and don't build tests that aren't ran automatically
+	"${FILESDIR}"/${PN}-3.34.0-tests-Add-another-duplicate.patch
 )
 
 src_prepare() {
