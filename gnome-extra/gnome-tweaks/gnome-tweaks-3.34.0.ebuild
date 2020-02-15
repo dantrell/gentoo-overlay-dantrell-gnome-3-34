@@ -46,4 +46,5 @@ PATCHES=(
 src_install() {
 	meson_src_install
 	python_fix_shebang "${ED}"/usr/bin/
+	python_optimize
 }
