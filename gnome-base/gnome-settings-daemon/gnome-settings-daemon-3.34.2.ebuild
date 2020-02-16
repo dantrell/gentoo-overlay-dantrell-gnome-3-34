@@ -57,12 +57,14 @@ COMMON_DEPEND="
 	x11-libs/libXext
 	media-libs/fontconfig
 "
-# logind needed for power and session management, bug #464944
+# consolekit or logind needed for power and session management, bug #464944
 # gnome-session-3.27.90 and gdm-3.27.9 adapt to A11yKeyboard component removal (moved to shell dealing with it)
+# dbus[user-session] for user services support (functional screen sharing setup)
 RDEPEND="${COMMON_DEPEND}
 	gnome-base/dconf
 	elogind? ( sys-auth/elogind )
-	systemd? ( sys-apps/systemd )
+	systemd? ( sys-apps/systemd
+		sys-apps/dbus[user-session] )
 	!<gnome-base/gnome-session-3.27.90
 	!<gnome-base/gdm-3.27.90
 "
