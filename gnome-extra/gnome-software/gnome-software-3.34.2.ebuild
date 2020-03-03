@@ -19,10 +19,11 @@ RESTRICT="!test? ( test )"
 RDEPEND="
 	>=dev-libs/appstream-glib-0.7.14:0
 	>=x11-libs/gdk-pixbuf-2.32.0:2
+	>=dev-libs/libxmlb-0.1.7
 	>=dev-libs/glib-2.56:2
+	net-libs/gnome-online-accounts:=
 	>=x11-libs/gtk+-3.22.4:3
 	>=dev-libs/json-glib-1.2.0
-	app-crypt/libsecret
 	>=net-libs/libsoup-2.52.0:2.4
 	gnome? ( >=gnome-base/gnome-desktop-3.18.0:3= )
 	spell? ( app-text/gspell:= )
@@ -73,11 +74,8 @@ src_configure() {
 		$(meson_use firmware fwupd)
 		-Dflatpak=false
 		-Drpm_ostree=false
-		-Dsteam=false
 		$(meson_use gnome shell_extensions) # Maybe gnome-shell USE?
 		-Dodrs=false
-		-Dubuntuone=false
-		-Dubuntu_reviews=false
 		-Dwebapps=true
 		$(meson_use udev gudev)
 		-Dsnap=false
@@ -89,7 +87,7 @@ src_configure() {
 }
 
 src_test() {
-	virtx meson test -v -C ${BUILD_DIR}
+	virtx meson test -v -C "${BUILD_DIR}"
 }
 
 pkg_postinst() {
