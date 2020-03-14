@@ -1,9 +1,8 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
-PYTHON_COMPAT=( python2_7 )
 
-inherit gnome.org gnome2-utils meson python-any-r1 virtualx xdg
+inherit gnome.org gnome2-utils meson virtualx xdg
 
 DESCRIPTION="Gnome install & update software"
 HOMEPAGE="https://wiki.gnome.org/Apps/Software"
@@ -12,9 +11,9 @@ LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="*"
 
-IUSE="+firmware gnome gtk-doc packagekit spell test udev"
+IUSE="+firmware gnome gtk-doc packagekit spell udev"
 
-RESTRICT="!test? ( test )"
+RESTRICT="test"
 
 RDEPEND="
 	>=dev-libs/appstream-glib-0.7.14:0
@@ -40,31 +39,16 @@ DEPEND="${RDEPEND}
 	gtk-doc? (
 		dev-util/gtk-doc
 		app-text/docbook-xml-dtd:4.3 )
-	test? (
-		${PYTHON_DEPS}
-		$(python_gen_any_dep 'dev-util/dogtail[${PYTHON_USEDEP}]') )
 "
-# test? ( dev-util/valgrind )
-
-python_check_deps() {
-	use test && has_version "dev-util/dogtail[${PYTHON_USEDEP}]"
-}
-
-pkg_setup() {
-	use test && python-any-r1_pkg_setup
-}
 
 src_prepare() {
 	xdg_src_prepare
 	sed -i -e '/install_data.*README\.md.*share\/doc\/gnome-software/d' meson.build || die
-	# Trouble talking to spawned gnome-keyring socket for some reason, even if wrapped in dbus-run-session
-	# TODO: Investigate; seems to work outside ebuild .. test/emerge
-	sed -i -e '/g_test_add_func.*gs_auth_secret_func/d' lib/gs-self-test.c || die
 }
 
 src_configure() {
 	local emesonargs=(
-		$(meson_use test tests)
+		-Dtests=false
 		$(meson_use spell gspell)
 		$(meson_use gnome gnome_desktop) # Investigate purpose, in relation to shell_extensions too (is it ok to be same USE?)
 		-Dman=true
@@ -84,10 +68,6 @@ src_configure() {
 		$(meson_use gtk-doc gtk_doc)
 	)
 	meson_src_configure
-}
-
-src_test() {
-	virtx meson test -v -C "${BUILD_DIR}"
 }
 
 pkg_postinst() {
