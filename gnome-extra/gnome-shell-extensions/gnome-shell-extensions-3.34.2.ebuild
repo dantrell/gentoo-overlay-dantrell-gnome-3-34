@@ -25,7 +25,8 @@ RDEPEND="${COMMON_DEPEND}
 	dev-libs/gobject-introspection:=
 	dev-libs/atk[introspection]
 	gnome-base/gnome-menus:3[introspection]
-	>=gnome-base/gnome-shell-3.32
+	>=gnome-base/gnome-shell-3.34
+	<gnome-base/gnome-shell-3.35
 	media-libs/clutter:1.0[introspection]
 	net-libs/telepathy-glib[introspection]
 	x11-libs/gdk-pixbuf:2[introspection]
@@ -38,7 +39,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-lang/sassc
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
-	test? ( dev-lang/spidermonkey:52 )
+	test? ( dev-lang/spidermonkey:60 )
 "
 
 DISABLE_AUTOFORMATTING="yes"
@@ -69,7 +70,6 @@ src_configure() {
 
 src_install() {
 	meson_src_install
-
 	readme.gentoo_create_doc
 }
 
