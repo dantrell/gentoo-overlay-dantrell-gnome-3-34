@@ -29,10 +29,9 @@ COMMON_DEPEND="
 	>=x11-libs/gtk+-3.13.2:3[X,introspection,wayland?]
 	>=x11-libs/gtksourceview-4.0.3:4[introspection]
 	>=media-libs/harfbuzz-0.9.9:=
-	>=dev-libs/gobject-introspection-1.54:=
+	>=dev-libs/gobject-introspection-0.9.6:=
 	media-libs/musicbrainz:5=
 	net-libs/webkit-gtk:4[introspection]
-
 "
 DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.19.8
