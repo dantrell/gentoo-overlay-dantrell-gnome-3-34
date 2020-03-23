@@ -11,7 +11,7 @@ LICENSE="MIT || ( MPL-1.1 LGPL-2+ GPL-2+ )"
 SLOT="0"
 KEYWORDS="*"
 
-IUSE="+cairo examples gtk readline sysprof test"
+IUSE="+cairo examples readline sysprof test"
 
 RESTRICT="!test? ( test )"
 
@@ -23,36 +23,34 @@ RDEPEND="
 	dev-lang/spidermonkey:60=
 	dev-libs/libffi:=
 	cairo? ( x11-libs/cairo[X] )
-	gtk? ( >=x11-libs/gtk+-3.20:3 )
 	sysprof? ( >=dev-util/sysprof-3.33.2 )
 "
 DEPEND="${RDEPEND}
 	gnome-base/gnome-common
 	sys-devel/gettext
 	virtual/pkgconfig
-	test? ( sys-apps/dbus )
+	test? (
+		sys-apps/dbus
+		x11-libs/gtk+:3
+	)
 "
 
 src_configure() {
-	# FIXME: add systemtap/dtrace support, like in glib:2
-	# FIXME: --enable-systemtap installs files in ${D}/${D} for some reason
-	# XXX: Do NOT enable coverage, completely useless for portage installs
+	# Code Coverage support is completely useless for portage installs
 	gnome2_src_configure \
 		--disable-systemtap \
 		--disable-dtrace \
 		--disable-code-coverage \
 		$(use_with cairo cairo) \
-		$(use_with gtk) \
+		$(use_with test gtk-tests) \
 		$(use_enable sysprof profiler) \
 		$(use_enable readline) \
 		$(use_with test dbus-tests) \
-		--disable-installed-tests \
-		--without-xvfb-tests # disables Makefile spawning Xvfb for us, as we do it ourselves:
-		# https://gitlab.gnome.org/GNOME/gjs/issues/280
+		--disable-installed-tests
 }
 
 src_install() {
-	# installation sometimes fails in parallel, bug #???
+	# Installation sometimes fails in parallel
 	gnome2_src_install -j1
 
 	if use examples; then

@@ -12,12 +12,12 @@ HOMEPAGE="https://gitlab.gnome.org/GNOME/gcr"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0/1" # subslot = suffix of libgcr-3
-KEYWORDS="~*"
+KEYWORDS="*"
 
 IUSE="debug gtk +introspection +vala"
 REQUIRED_USE="vala? ( introspection )"
 
-RESTRICT="!test? ( test )"
+RESTRICT="!test? ( test )" # IUSE=test comes from virtualx.eclass
 
 COMMON_DEPEND="
 	>=app-crypt/p11-kit-0.19
