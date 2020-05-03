@@ -97,14 +97,6 @@ src_prepare() {
 		eapply "${FILESDIR}"/${PN}-3.32.0-metashapedtexture-disable-mipmapping-emulation.patch
 	fi
 
-	if ! use wayland; then
-		# From Gentoo:
-		# 	https://forums.gentoo.org/viewtopic-p-8106588.html#8106588
-		# 	https://gitlab.gnome.org/GNOME/mutter/issues/797
-		# 	https://gitlab.gnome.org/GNOME/mutter/merge_requests/817
-		eapply "${FILESDIR}"/${PN}-3.34.1-fix-without-gdkwayland.patch
-	fi
-
 	eapply "${FILESDIR}"/${PN}-3.32.2-eglmesaext-include.patch
 
 	gnome2_src_prepare
