@@ -30,6 +30,9 @@ DEPEND="${RDEPEND}
 	$(vala_depend)
 	dev-libs/appstream-glib
 	dev-libs/libxml2:2
+	dev-libs/libxslt
+	app-text/docbook-xml-dtd:4.2
+	app-text/docbook-xsl-stylesheets
 	dev-util/gdbus-codegen
 	dev-util/itstool
 	>=sys-devel/gettext-0.19.8
@@ -53,6 +56,7 @@ src_configure() {
 		-Dhkp-support=true
 		$(meson_use ldap ldap-support)
 		$(meson_use zeroconf key-sharing)
+		-Dmanpage=true
 	)
 	meson_src_configure
 }
