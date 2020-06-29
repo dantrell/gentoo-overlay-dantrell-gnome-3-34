@@ -1,0 +1,129 @@
+From 80c0a470e73cdcb2217f750cdd63b621c8f3e1ff Mon Sep 17 00:00:00 2001
+From: Carlos Garnacho <carlosg@gnome.org>
+Date: Wed, 13 May 2020 16:36:13 +0200
+Subject: [PATCH 3/4] wayland: Send clipboard offers to all data devices from
+ the same client
+
+Make the data device track the keyboard focus, and use that list to
+forward the clipboard selection to all data devices from the same
+client.
+
+This is however not the case of DnD data offers, as the semantics
+of multiple in-flight offers is unclear.
+
+Fixes: https://gitlab.gnome.org/GNOME/mutter/-/issues/1250
+
+(cherry-pick of commit 7e4e3714663952a69ba0a26662841fc5c0cb266c)
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1262
+---
+ src/wayland/meta-wayland-data-device.c | 46 ++++++++++++++++++++++----
+ src/wayland/meta-wayland-data-device.h |  1 +
+ 2 files changed, 41 insertions(+), 6 deletions(-)
+
+diff --git a/src/wayland/meta-wayland-data-device.c b/src/wayland/meta-wayland-data-device.c
+index e3d0772b2..9ed237417 100644
+--- a/src/wayland/meta-wayland-data-device.c
++++ b/src/wayland/meta-wayland-data-device.c
+@@ -108,6 +108,30 @@ static struct wl_resource * create_and_send_primary_offer   (MetaWaylandDataDevi
+                                                              struct wl_resource    *target);
+ static struct wl_resource * meta_wayland_data_source_get_resource (MetaWaylandDataSource *source);
+ 
++static void
++move_resources (struct wl_list *destination,
++                struct wl_list *source)
++{
++  wl_list_insert_list (destination, source);
++  wl_list_init (source);
++}
++
++static void
++move_resources_for_client (struct wl_list   *destination,
++			   struct wl_list   *source,
++			   struct wl_client *client)
++{
++  struct wl_resource *resource, *tmp;
++  wl_resource_for_each_safe (resource, tmp, source)
++    {
++      if (wl_resource_get_client (resource) == client)
++        {
++          wl_list_remove (wl_resource_get_link (resource));
++          wl_list_insert (destination, wl_resource_get_link (resource));
++        }
++    }
++}
++
+ static void
+ unbind_resource (struct wl_resource *resource)
+ {
+@@ -901,6 +925,12 @@ meta_wayland_drag_grab_set_focus (MetaWaylandDragGrab *drag_grab,
+   client = wl_resource_get_client (surface->resource);
+ 
+   data_device_resource = wl_resource_find_for_client (&seat->data_device.resource_list, client);
++  if (!data_device_resource)
++    {
++      data_device_resource =
++        wl_resource_find_for_client (&seat->data_device.focus_resource_list,
++                                     client);
++    }
+ 
+   if (source && data_device_resource)
+     offer = create_and_send_dnd_offer (source, data_device_resource);
+@@ -1847,10 +1877,7 @@ owner_changed_cb (MetaSelection         *selection,
+     }
+   else if (selection_type == META_SELECTION_CLIPBOARD)
+     {
+-      data_device_resource =
+-        wl_resource_find_for_client (&data_device->resource_list, focus_client);
+-
+-      if (data_device_resource)
++      wl_resource_for_each (data_device_resource, &data_device->focus_resource_list)
+         {
+           struct wl_resource *offer = NULL;
+ 
+@@ -1985,6 +2012,7 @@ void
+ meta_wayland_data_device_init (MetaWaylandDataDevice *data_device)
+ {
+   wl_list_init (&data_device->resource_list);
++  wl_list_init (&data_device->focus_resource_list);
+   wl_list_init (&data_device->primary_resource_list);
+ }
+ 
+@@ -2067,14 +2095,20 @@ meta_wayland_data_device_set_keyboard_focus (MetaWaylandDataDevice *data_device)
+     return;
+ 
+   data_device->focus_client = focus_client;
++  move_resources (&data_device->resource_list,
++                  &data_device->focus_resource_list);
+ 
+   if (!focus_client)
+     return;
+ 
+-  data_device_resource = wl_resource_find_for_client (&data_device->resource_list, focus_client);
+-  if (data_device_resource)
++  move_resources_for_client (&data_device->focus_resource_list,
++                             &data_device->resource_list,
++                             focus_client);
++
++  wl_resource_for_each (data_device_resource, &data_device->focus_resource_list)
+     {
+       struct wl_resource *offer;
++
+       offer = create_and_send_clipboard_offer (data_device, data_device_resource);
+       wl_data_device_send_selection (data_device_resource, offer);
+     }
+diff --git a/src/wayland/meta-wayland-data-device.h b/src/wayland/meta-wayland-data-device.h
+index 027dafc54..7ebaca326 100644
+--- a/src/wayland/meta-wayland-data-device.h
++++ b/src/wayland/meta-wayland-data-device.h
+@@ -63,6 +63,7 @@ struct _MetaWaylandDataDevice
+   MetaWaylandDataSource *primary_data_source;
+   struct wl_listener selection_data_source_listener;
+   struct wl_list resource_list;
++  struct wl_list focus_resource_list;
+   struct wl_list primary_resource_list;
+   MetaWaylandDragGrab *current_grab;
+   struct wl_client *focus_client;
+-- 
+2.20.1
+
