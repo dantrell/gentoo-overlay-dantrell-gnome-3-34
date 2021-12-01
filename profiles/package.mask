@@ -15,7 +15,6 @@ dev-libs/gobject-introspection::gentoo
 dev-libs/jsonrpc-glib::gentoo
 dev-libs/libdazzle::gentoo
 dev-libs/libgweather::gentoo
-dev-libs/template-glib::gentoo
 dev-python/pyatspi::gentoo
 dev-python/pygobject::gentoo
 dev-util/devhelp::gentoo
