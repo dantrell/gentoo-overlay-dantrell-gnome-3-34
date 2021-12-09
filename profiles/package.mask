@@ -12,7 +12,6 @@ dev-libs/atk::gentoo
 dev-libs/gjs::gentoo
 dev-libs/gobject-introspection-common::gentoo
 dev-libs/gobject-introspection::gentoo
-dev-libs/jsonrpc-glib::gentoo
 dev-libs/libdazzle::gentoo
 dev-libs/libgweather::gentoo
 dev-python/pyatspi::gentoo
@@ -36,6 +35,7 @@ games-puzzle/hitori::gentoo
 games-puzzle/lightsoff::gentoo
 games-puzzle/quadrapassel::gentoo
 gnome-base/dconf-editor::gentoo
+gnome-base/gnome-applets::gentoo
 gnome-base/gnome-control-center::gentoo
 gnome-base/gnome-core-apps::gentoo
 gnome-base/gnome-core-libs::gentoo
