@@ -2,7 +2,7 @@
 
 EAPI="6"
 GNOME2_LA_PUNT="yes"
-PYTHON_COMPAT=( python{3_8,3_9,3_10} )
+PYTHON_COMPAT=( python{3_8,3_9,3_10,3_11} )
 
 inherit fcaps gnome2 pam python-any-r1 virtualx
 
@@ -19,7 +19,7 @@ RESTRICT="!test? ( test )"
 
 # Replace gkd gpg-agent with pinentry[gnome-keyring] one, bug #547456
 RDEPEND="
-	>=app-crypt/gcr-3.27.90:=[gtk]
+	>=app-crypt/gcr-3.27.90:0=[gtk]
 	>=dev-libs/glib-2.44:2
 	app-misc/ca-certificates
 	>=dev-libs/libgcrypt-1.2.2:0=
