@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
-PYTHON_COMPAT=( python{3_8,3_9,3_10,3_11} )
+PYTHON_COMPAT=( python{3_9,3_10,3_11} )
 VALA_MIN_API_VERSION="0.36"
 DISABLE_AUTOFORMATTING=1
 FORCE_PRINT_ELOG=1
@@ -75,7 +75,7 @@ DEPEND="${RDEPEND}"
 # appstream-glib needed for validation with appstream-util with FEATURES=test
 BDEPEND="
 	doc? ( dev-python/sphinx
-		dev-python/sphinx_rtd_theme )
+		dev-python/sphinx-rtd-theme )
 	gtk-doc? ( dev-util/gtk-doc
 		app-text/docbook-xml-dtd:4.3 )
 	test? (
