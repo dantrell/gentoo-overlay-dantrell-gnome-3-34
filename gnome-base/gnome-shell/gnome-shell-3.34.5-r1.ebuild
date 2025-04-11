@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
-PYTHON_COMPAT=( python{3_9,3_10,3_11} )
+PYTHON_COMPAT=( python{3_10,3_11,3_12,3_13} )
 
 inherit gnome.org gnome2-utils meson pax-utils python-single-r1 virtualx xdg
 
@@ -128,7 +128,7 @@ src_prepare() {
 
 	if ! use vanilla-gc; then
 		# From GNOME:
-		# 	https://gitlab.gnome.org/GNOME/gnome-shell/issues/64
+		# 	https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/64
 		eapply "${FILESDIR}"/${PN}-3.14.4-force-garbage-collection.patch
 	fi
 
@@ -141,7 +141,7 @@ src_prepare() {
 	fi
 
 	# From GNOME:
-	# 	https://gitlab.gnome.org/GNOME/gnome-shell/commit/13137aad9db52223e8b62cecbd3456f4a7f66f04
+	# 	https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/13137aad9db52223e8b62cecbd3456f4a7f66f04
 	eapply "${FILESDIR}"/${PN}-3.34.5-logindialog-reset-auth-prompt-on-vt-switch-before-fade-in.patch
 
 	# Change favorites defaults, bug #479918

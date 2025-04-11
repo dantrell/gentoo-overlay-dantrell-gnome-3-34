@@ -2,7 +2,7 @@
 
 EAPI="7"
 
-PYTHON_COMPAT=( python{3_9,3_10,3_11} )
+PYTHON_COMPAT=( python{3_10,3_11,3_12,3_13} )
 PYTHON_REQ_USE="xml(+)"
 
 inherit gnome.org meson python-single-r1 toolchain-funcs xdg
@@ -46,7 +46,7 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	# From GNOME:
-	# 	https://gitlab.gnome.org/GNOME/gobject-introspection/commit/1f9284228092b2a7200e8a78bc0ea6702231c6db
+	# 	https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/1f9284228092b2a7200e8a78bc0ea6702231c6db
 	"${FILESDIR}"/${PN}-1.63.2-drop-deprecated-xml-etree-elementtree-element-getchildren-calls.patch
 )
 

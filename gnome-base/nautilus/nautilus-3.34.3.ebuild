@@ -86,7 +86,7 @@ src_prepare() {
 	fi
 
 	# From GNOME:
-	# 	https://gitlab.gnome.org/GNOME/nautilus/commit/9738d8561ed38a87b4d72db3e49653641edd9a09
+	# 	https://gitlab.gnome.org/GNOME/nautilus/-/commit/9738d8561ed38a87b4d72db3e49653641edd9a09
 	eapply "${FILESDIR}"/${PN}-3.34.2-pango-compat.patch
 
 	xdg_src_prepare
